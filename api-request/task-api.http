@@ -1,0 +1,195 @@
+### Task Manager API - IntelliJ HTTP Client Requests
+### Base URL Configuration
+@baseUrl = http://localhost:8080/api/tasks
+
+### ============================================
+### CREATE TASK
+### ============================================
+
+### Create a new task with all fields
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive documentation for the Task Manager API including setup instructions and usage examples.",
+  "status": "TODO",
+  "priority": "HIGH",
+  "dueDate": "2024-12-31"
+}
+
+### Create a minimal task (only required fields)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Quick task"
+}
+
+### Create a task with medium priority
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Review pull requests",
+  "description": "Review and approve pending pull requests from the team",
+  "priority": "MEDIUM"
+}
+
+### Create an IN_PROGRESS task
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Implement user authentication",
+  "description": "Add JWT-based authentication to the API",
+  "status": "IN_PROGRESS",
+  "priority": "HIGH",
+  "dueDate": "2024-12-25"
+}
+
+### ============================================
+### GET TASKS
+### ============================================
+
+### Get all tasks
+GET {{baseUrl}}
+Accept: application/json
+
+### Get task by ID (replace 1 with actual task ID)
+GET {{baseUrl}}/1
+Accept: application/json
+
+### Get task by ID - Example with ID 2
+GET {{baseUrl}}/2
+Accept: application/json
+
+### ============================================
+### UPDATE TASK
+### ============================================
+
+### Update task - Change status to IN_PROGRESS (replace 1 with actual task ID)
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive documentation for the Task Manager API - Updated!",
+  "status": "IN_PROGRESS",
+  "priority": "HIGH",
+  "dueDate": "2024-12-31"
+}
+
+### Update task - Mark as DONE
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "title": "Complete project documentation",
+  "description": "Documentation completed successfully!",
+  "status": "DONE",
+  "priority": "HIGH",
+  "dueDate": "2024-12-31"
+}
+
+### Update task - Change priority to LOW
+PUT {{baseUrl}}/2
+Content-Type: application/json
+
+{
+  "title": "Low priority task",
+  "description": "This task can wait",
+  "status": "TODO",
+  "priority": "LOW"
+}
+
+### ============================================
+### DELETE TASK
+### ============================================
+
+### Delete task by ID (replace 1 with actual task ID)
+DELETE {{baseUrl}}/1
+
+### Delete task - Example with ID 2
+DELETE {{baseUrl}}/2
+
+### ============================================
+### ERROR CASES (for testing)
+### ============================================
+
+### Get non-existent task (should return 404)
+GET {{baseUrl}}/99999
+Accept: application/json
+
+### Create task with empty title (should return 400 - validation error)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "This should fail validation"
+}
+
+### Create task without title (should return 400 - validation error)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "description": "Missing required title field"
+}
+
+### Update non-existent task (should return 404)
+PUT {{baseUrl}}/99999
+Content-Type: application/json
+
+{
+  "title": "This task doesn't exist"
+}
+
+### Delete non-existent task (should return 404)
+DELETE {{baseUrl}}/99999
+
+### ============================================
+### BULK OPERATIONS (Run in sequence)
+### ============================================
+
+### Step 1: Create first task
+# @name createTask1
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Task 1 - Setup development environment",
+  "description": "Install required tools and configure IDE",
+  "status": "DONE",
+  "priority": "HIGH"
+}
+
+### Step 2: Create second task
+# @name createTask2
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Task 2 - Database schema design",
+  "description": "Design the database schema for the application",
+  "status": "IN_PROGRESS",
+  "priority": "HIGH"
+}
+
+### Step 3: Create third task
+# @name createTask3
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Task 3 - Write unit tests",
+  "description": "Create comprehensive unit tests for all services",
+  "status": "TODO",
+  "priority": "MEDIUM",
+  "dueDate": "2025-01-15"
+}
+
+### Step 4: Verify all tasks created
+GET {{baseUrl}}
+Accept: application/json
