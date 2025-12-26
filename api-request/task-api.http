@@ -1,6 +1,6 @@
 ### Task Manager API - IntelliJ HTTP Client Requests
 ### Base URL Configuration
-@baseUrl = http://localhost:8080/api/tasks
+@baseUrl = http://localhost:30080/api/tasks
 
 ### ============================================
 ### CREATE TASK
@@ -11,7 +11,7 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "title": "Complete project documentation",
+  "title": "Complete project documentation2",
   "description": "Write comprehensive documentation for the Task Manager API including setup instructions and usage examples.",
   "status": "TODO",
   "priority": "HIGH",

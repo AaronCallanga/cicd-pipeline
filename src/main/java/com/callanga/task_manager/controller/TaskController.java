@@ -28,6 +28,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
         TaskResponse response = taskService.createTask(request);
+        System.out.println(response);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
