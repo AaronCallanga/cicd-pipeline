@@ -28,19 +28,10 @@ data:
   DATABASE_USERNAME: cG9zdGdyZXM=
   DATABASE_PASSWORD: cG9zdGdyZXM=
 
----
-# GHCR Pull Secret
-# Create using: kubectl create secret docker-registry ghcr-secret \
+# GHCR Pull Secret - NOT NEEDED for public repos
+# If you make the repo private, create the secret manually:
+# kubectl create secret docker-registry ghcr-secret \
 #   --docker-server=ghcr.io \
 #   --docker-username=AaronCallanga \
 #   --docker-password=YOUR_GITHUB_PAT \
 #   -n task-manager
-
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ghcr-secret
-type: kubernetes.io/dockerconfigjson
-data:
-  # PLACEHOLDER: Replace with your actual dockerconfigjson
-  .dockerconfigjson: REPLACE_WITH_YOUR_DOCKER_CONFIG_JSON_BASE64
