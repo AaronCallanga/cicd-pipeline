@@ -31,7 +31,9 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: ./mvnw clean compile -B
+        run: |
+          chmod +x mvnw
+          ./mvnw clean compile -B
 
       - name: Run Tests
         run: ./mvnw test -B
