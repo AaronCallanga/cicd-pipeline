@@ -12,10 +12,10 @@ resources:
 images:
 <<<<<<< HEAD
   - name: ghcr.io/aaroncallanga/cicd-pipeline
-    newTag: 4dec947
+    newTag: 4f28d96
 =======
   - name: ghcr.io/aaroncallanga/task-manager
-    newTag: d855fc8
+    newTag: 4f28d96
 >>>>>>> bef86610bf7c596ffcafbc190edca540706aa2bc
 
 labels:
