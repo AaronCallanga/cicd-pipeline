@@ -13,25 +13,31 @@ Source (GitHub) → Build (Maven) → Test → CodeQL → Container (GHCR) → K
 ```
 task-manager/
 ├── .github/workflows/       # GitHub Actions CI/CD
-│   └── ci.yml              # Main CI/CD pipeline
-├── k8s/base/               # Kubernetes manifests
-│   ├── kustomization.yaml  # Kustomize config
-│   ├── namespace.yaml
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── configmap.yaml
-│   ├── secret.yaml
-│   ├── postgres-deployment.yaml
-│   └── postgres-service.yaml
-├── argocd/                 # ArgoCD configuration
-│   └── application.yaml
-├── scripts/                # Setup scripts
-│   ├── setup-cluster.sh    # Linux/Mac
-│   └── setup-cluster.ps1   # Windows
-├── kind-config.yaml        # Kind cluster config
+│   └── ci.yml               # Main CI/CD pipeline
+├── kustomize/               # Kubernetes manifests (Kustomize)
+│   ├── base/                # Base manifests
+│   │   ├── kustomization.yaml
+│   │   ├── namespace.yaml
+│   │   ├── app-deployment.yaml   # App Deployment + Service
+│   │   ├── postgres.yaml         # PostgreSQL + Service + PVC
+│   │   └── config.yaml           # ConfigMap + Secrets
+│   └── overlays/
+│       ├── dev/             # Dev environment patches
+│       │   ├── kustomization.yaml
+│       │   └── patches.yaml
+│       └── prod/            # Prod environment patches
+│           ├── kustomization.yaml
+│           └── patches.yaml
+├── argocd/                  # ArgoCD configuration
+│   ├── application-dev.yaml     # Dev environment app
+│   └── application-prod.yaml    # Prod environment app
+├── scripts/                 # Setup scripts
+│   ├── setup-cluster.sh     # Linux/Mac
+│   └── setup-cluster.ps1    # Windows
+├── kind-config.yaml         # Kind cluster config
 ├── Dockerfile
 ├── docker-compose.yml
-└── src/                    # Application source
+└── src/                     # Application source
 ```
 
 ## 🚀 Quick Start
@@ -56,13 +62,15 @@ git push -u origin main
 
 **Windows (PowerShell):**
 ```powershell
-.\scripts\setup-cluster.ps1
+.\scripts\setup-cluster.ps1         # Deploy dev (default)
+.\scripts\setup-cluster.ps1 prod    # Deploy prod
 ```
 
 **Linux/Mac:**
 ```bash
 chmod +x scripts/setup-cluster.sh
-./scripts/setup-cluster.sh
+./scripts/setup-cluster.sh          # Deploy dev (default)
+./scripts/setup-cluster.sh prod     # Deploy prod
 ```
 
 ### 3. Create GHCR Pull Secret
@@ -106,8 +114,15 @@ git push
 2. **Test** - Run unit tests
 3. **CodeQL** - Security analysis
 4. **Container** - Build & push to GHCR
-5. **Update Manifest** - Update K8s image tag
+5. **Update Manifest** - Update K8s image tag in kustomize/base
 6. **ArgoCD Sync** - Auto-deploy to cluster
+
+## 🌍 Environments
+
+| Environment | ArgoCD App | Kustomize Path | Replicas | Resources |
+|-------------|------------|----------------|----------|-----------|
+| Dev | task-manager-dev | kustomize/overlays/dev | 1 | Lower |
+| Prod | task-manager-prod | kustomize/overlays/prod | 3 | Higher |
 
 ## 📊 Local Development
 
@@ -120,6 +135,10 @@ docker compose up -d
 
 # Build JAR
 ./mvnw package -DskipTests
+
+# Preview kustomize output
+kubectl kustomize kustomize/overlays/dev
+kubectl kustomize kustomize/overlays/prod
 ```
 
 ## 🛠️ Useful Commands
@@ -136,4 +155,7 @@ kubectl get applications -n argocd
 
 # Delete Kind cluster
 kind delete cluster --name task-manager-cluster
+
+# Apply manifests manually
+kubectl apply -k kustomize/overlays/dev
 ```

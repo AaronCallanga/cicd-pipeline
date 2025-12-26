@@ -9,6 +9,11 @@
 #   - kind installed (https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 #   - kubectl installed
 #   - (Optional) argocd CLI for port-forwarding
+#
+# Usage:
+#   ./setup-cluster.sh         # Deploy dev environment (default)
+#   ./setup-cluster.sh dev     # Deploy dev environment
+#   ./setup-cluster.sh prod    # Deploy prod environment
 
 set -e
 
@@ -16,9 +21,11 @@ CLUSTER_NAME="task-manager-cluster"
 ARGOCD_NAMESPACE="argocd"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+ENVIRONMENT="${1:-dev}"
 
 echo "=========================================="
 echo "  Task Manager - Kind Cluster Setup"
+echo "  Environment: $ENVIRONMENT"
 echo "=========================================="
 
 # -------------------------------------------
@@ -90,9 +97,9 @@ echo ""
 # Step 5: Deploy ArgoCD Application
 # -------------------------------------------
 echo ""
-echo "[5/5] Deploying ArgoCD Application..."
+echo "[5/5] Deploying ArgoCD Application ($ENVIRONMENT)..."
 
-kubectl apply -f "$PROJECT_ROOT/argocd/application.yaml"
+kubectl apply -f "$PROJECT_ROOT/argocd/application-$ENVIRONMENT.yaml"
 
 echo "✓ ArgoCD Application deployed"
 
@@ -122,4 +129,8 @@ echo "  - View ArgoCD apps:  kubectl get applications -n argocd"
 echo "  - View pods:         kubectl get pods -n task-manager"
 echo "  - View logs:         kubectl logs -f deployment/task-manager -n task-manager"
 echo "  - Delete cluster:    kind delete cluster --name $CLUSTER_NAME"
+echo ""
+echo "To deploy a different environment:"
+echo "  ./scripts/setup-cluster.sh dev   # Deploy dev environment"
+echo "  ./scripts/setup-cluster.sh prod  # Deploy prod environment"
 echo ""

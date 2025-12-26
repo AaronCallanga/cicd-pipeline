@@ -13,9 +13,11 @@ $ErrorActionPreference = "Stop"
 $CLUSTER_NAME = "task-manager-cluster"
 $ARGOCD_NAMESPACE = "argocd"
 $PROJECT_ROOT = Split-Path -Parent $PSScriptRoot
+$ENVIRONMENT = if ($args[0]) { $args[0] } else { "dev" }
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "  Task Manager - Kind Cluster Setup" -ForegroundColor Cyan
+Write-Host "  Environment: $ENVIRONMENT" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # -------------------------------------------
@@ -83,9 +85,9 @@ Write-Host ""
 # -------------------------------------------
 # Step 5: Deploy ArgoCD Application
 # -------------------------------------------
-Write-Host "`n[5/5] Deploying ArgoCD Application..." -ForegroundColor Yellow
+Write-Host "`n[5/5] Deploying ArgoCD Application ($ENVIRONMENT)..." -ForegroundColor Yellow
 
-kubectl apply -f "$PROJECT_ROOT\argocd\application.yaml"
+kubectl apply -f "$PROJECT_ROOT\argocd\application-$ENVIRONMENT.yaml"
 
 Write-Host "✓ ArgoCD Application deployed" -ForegroundColor Green
 
@@ -115,4 +117,8 @@ Write-Host "  - View ArgoCD apps:  kubectl get applications -n argocd"
 Write-Host "  - View pods:         kubectl get pods -n task-manager"
 Write-Host "  - View logs:         kubectl logs -f deployment/task-manager -n task-manager"
 Write-Host "  - Delete cluster:    kind delete cluster --name $CLUSTER_NAME"
+Write-Host ""
+Write-Host "To deploy a different environment:" -ForegroundColor White
+Write-Host "  .\scripts\setup-cluster.ps1 dev   # Deploy dev environment"
+Write-Host "  .\scripts\setup-cluster.ps1 prod  # Deploy prod environment"
 Write-Host ""
