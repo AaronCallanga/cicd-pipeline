@@ -23,7 +23,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/AaronCallanga/task-manager.git
+    repoURL: https://github.com/AaronCallanga/cicd-pipeline.git
     targetRevision: HEAD
     path: kustomize/overlays/prod
 

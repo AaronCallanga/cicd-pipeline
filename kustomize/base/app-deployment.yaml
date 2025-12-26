@@ -18,8 +18,9 @@ spec:
     spec:
       containers:
         - name: task-manager
-          image: ghcr.io/aaroncallanga/task-manager:latest
-          imagePullPolicy: Always
+          image: ghcr.io/aaroncallanga/cicd-pipeline:latest
+          #imagePullSecrets: -name: ghcr-secret for private repo (currently: public)
+          imagePullPolicy: Always    
           ports:
             - containerPort: 8080
               name: http

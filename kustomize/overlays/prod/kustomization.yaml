@@ -9,10 +9,8 @@ namespace: task-manager
 resources:
   - ../../base
 
-# Prod-specific image tag (should be pinned to specific version in production)
-images:
-  - name: ghcr.io/aaroncallanga/task-manager
-    newTag: latest
+# Image tag is controlled by base kustomization (updated by CI)
+# All environments use the same image - only resource configs differ
 
 # Prod-specific labels
 labels:

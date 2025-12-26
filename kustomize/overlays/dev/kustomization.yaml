@@ -12,10 +12,8 @@ resources:
 # Environment-specific naming
 nameSuffix: ""
 
-# Dev-specific image tag (optional - can be overridden by CI)
-images:
-  - name: ghcr.io/aaroncallanga/task-manager
-    newTag: latest
+# Image tag is controlled by base kustomization (updated by CI)
+# All environments use the same image - only resource configs differ
 
 # Dev-specific labels
 labels:
